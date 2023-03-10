@@ -6,6 +6,8 @@ using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Spg.SpengerShop.Api.Services;
+using Spg.SpengerShop.Application.Authentication;
 using Spg.SpengerShop.Application.Services;
 using Spg.SpengerShop.Application.Services.Customers.Queries;
 using Spg.SpengerShop.Application.Validators;
@@ -29,12 +31,14 @@ builder.Services.AddTransient<IAddUpdateableProductService, ProductService>();
 builder.Services.AddTransient<IReadOnlyProductService, ProductService>();
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
 
-builder.Services.AddTransient<IRequestHandler<GetFilteredCustomerQuery, IQueryable<Customer>>, GetFilteredCustomerHandler>();
 builder.Services.AddTransient<IRequestHandler<GetCustomerByIdQuery, Customer>, GetCustomerByIdQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<GetFilteredCustomerQuery, IQueryable<Customer>>, GetFilteredCustomerHandler>();
 
 builder.Services.AddTransient<IRepository<Customer>, CustomerRepository>();
 
 builder.Services.AddTransient<IReadOnlyRepositoryBase<Customer>, ReadOnlyRepositoryBase<Customer>>();
+
+builder.Services.AddTransient<IAuthService, DbAuthService>();
 
 builder.Services.ConfigureSqLite(connectionString);
 
@@ -89,6 +93,28 @@ builder.Services.AddTransient<IValidator<NewProductDto>, NewProductDtoValidator>
 builder.Services.AddScoped<ValidationFilterAttribute>();
 
 
+// Authentication
+// Soll ein gespeichertes Secret verwendet werden, kann folgende Zeite statt dessen
+// verwendet werden:
+string jwtSecret = builder.Configuration["AppSettings:Secret"] ?? ApiAuthService.GenerateRandom(1024);
+
+// JWT aktivieren, aber nicht standardmäßig aktivieren. Daher muss beim Controller
+//     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+// geschrieben werden. Wird nur eine API bereitgestellt, kann dieser Parameter auf
+// true gesetzt und Cookies natürlich deaktiviert werden.
+builder.Services.AddJwtAuthentication(jwtSecret, setDefault: false);
+
+// Cookies aktivieren. Dies ist für Blazor oder MVC Applikationen gedacht.
+builder.Services.AddCookieAuthentication(setDefault: true);
+
+// Instanzieren des Userservices mit einer Factorymethode. Diese übergibt das gespeicherte
+// Secret.
+builder.Services.AddTransient<ApiAuthService>();
+// oder folgende zeile mit einem Secret aus der appsettings.json
+//builder.Services.AddScoped<ApiAuthService>(services =>
+//    new ApiAuthService(jwtSecret));
+
+// Authentication
 
 DbContextOptions options = new DbContextOptionsBuilder()
 .UseSqlite(connectionString)
@@ -111,6 +137,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("myAllowSpecificOrigins");
+
+// Muss NACH UseRouting() und VOR UseEndpoints() stehen.
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UsePathBase("/myapp");

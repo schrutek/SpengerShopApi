@@ -20,12 +20,9 @@ namespace Spg.SpengerShop.Application.Services.Customers.Queries
             _repository = repository;
         }
 
-        public Expression<Func<Product, bool>>? Filter { get; set; }
-
         public async Task<Customer> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
         {
-            return null;
-            //return await _repository.GetSingleAsync();
+            return null; // await _repository.Get(filter: r => r.Guid == request.Guid);
         }
     }
 }

@@ -84,7 +84,7 @@ namespace Spg.SpengerShop.Api.Controllers
             int newId = 4711;
             string? url = _linkGenerator.GetUriByAction(HttpContext, action: nameof(GetDetails), values: new { id = newId });
 
-            return Created(url, null);
+            return Created(url, newProduct);
         }
     }
 }
