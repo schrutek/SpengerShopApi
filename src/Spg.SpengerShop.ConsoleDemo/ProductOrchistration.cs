@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Bogus.DataSets;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Spg.SpengerShop.Domain.Dtos;
 using Spg.SpengerShop.Domain.Exceptions;
 using Spg.SpengerShop.Domain.Interfaces;
 using Spg.SpengerShop.Domain.Model;
@@ -30,7 +32,13 @@ namespace Spg.SpengerShop.ConsoleDemo
 
             try
             {
-                _productService.Create(new Product("Testprodukt 3", 20, "0123456789123", "Material 3", DateTime.Now.AddDays(30), null));
+                _productService.Create(new ProductDto()
+                {
+                    Name = "Testprodukt 3",
+                    Ean13 = "0123456789123",
+                    ExpiryDate = DateTime.Now.AddDays(30),
+                    DeliveryDate = null
+                });
             }
             catch (Exception ex)
             {

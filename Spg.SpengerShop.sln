@@ -23,9 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spg.SpengerShop.Api.Test", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spg.SpengerShop.ConsoleDemo", "src\Spg.SpengerShop.ConsoleDemo\Spg.SpengerShop.ConsoleDemo.csproj", "{3384AB26-7478-4A17-AB07-B9F1498475A0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spg.SpengerShop.ApplicationTest", "..\sj2223-4bhif-pos-rest-api-project-schrutek\test\Spg.SpengerShop.ApplicationTest\Spg.SpengerShop.ApplicationTest.csproj", "{B23DB8ED-B340-40E3-9142-6D7D888D4755}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spg.SpengerShop.ApplicationTest", "tests\Spg.SpengerShop.ApplicationTest\Spg.SpengerShop.ApplicationTest.csproj", "{549F9E40-14B9-442B-96BD-6D375E09C5CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spg.SpengerShop.RepositoryTest", "..\sj2223-4bhif-pos-rest-api-project-schrutek\test\Spg.SpengerShop.RepositoryTest\Spg.SpengerShop.RepositoryTest.csproj", "{422BC2FC-5551-4567-B30B-8B9BF3A15CD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spg.SpengerShop.RepositoryTest", "tests\Spg.SpengerShop.RepositoryTest\Spg.SpengerShop.RepositoryTest.csproj", "{BF0130E2-CE83-4F46-A762-869D360D64AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,14 +73,14 @@ Global
 		{3384AB26-7478-4A17-AB07-B9F1498475A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3384AB26-7478-4A17-AB07-B9F1498475A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3384AB26-7478-4A17-AB07-B9F1498475A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B23DB8ED-B340-40E3-9142-6D7D888D4755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B23DB8ED-B340-40E3-9142-6D7D888D4755}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B23DB8ED-B340-40E3-9142-6D7D888D4755}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B23DB8ED-B340-40E3-9142-6D7D888D4755}.Release|Any CPU.Build.0 = Release|Any CPU
-		{422BC2FC-5551-4567-B30B-8B9BF3A15CD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{422BC2FC-5551-4567-B30B-8B9BF3A15CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{422BC2FC-5551-4567-B30B-8B9BF3A15CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{422BC2FC-5551-4567-B30B-8B9BF3A15CD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{549F9E40-14B9-442B-96BD-6D375E09C5CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{549F9E40-14B9-442B-96BD-6D375E09C5CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{549F9E40-14B9-442B-96BD-6D375E09C5CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{549F9E40-14B9-442B-96BD-6D375E09C5CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF0130E2-CE83-4F46-A762-869D360D64AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF0130E2-CE83-4F46-A762-869D360D64AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF0130E2-CE83-4F46-A762-869D360D64AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF0130E2-CE83-4F46-A762-869D360D64AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

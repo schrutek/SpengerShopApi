@@ -14,6 +14,7 @@ namespace Spg.SpengerShop.Domain.Model
         {
             Name = name;
             ShopNavigation = shop;
+            Guid = guid;
         }
 
         public string Name { get; set; }

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Spg.SpengerShop.Domain.Exceptions;
 using Spg.SpengerShop.Domain.Interfaces;
 using Spg.SpengerShop.Infrastructure;
 using System;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Spg.SpengerShop.Repository
 {
-    public class RepositoryBase<TKey, TEntity> : IRepositoryBase<TKey, TEntity>
+    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
     {
         private readonly SpengerShopContext _db;
 
@@ -20,16 +22,30 @@ namespace Spg.SpengerShop.Repository
 
         public void Create(TEntity newEntity)
         {
+            // TODO: NULL-Handling
+            if (newEntity is null)
+            {
+                throw new RepositoryCreateException($"{nameof(TEntity)} war NULL!");
+            }
+
+            // TODO: Exception Handling
             _db.Add(newEntity);
-            _db.SaveChanges();
+            try
+            {
+                _db.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new RepositoryCreateException($"Create ist für {nameof(TEntity)} fehlgeschlagen!", ex);
+            }
         }
 
-        public void Delete(TKey id)
+        public void Delete<TKey>(TKey id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(TKey id, TEntity newEntity)
+        public void Update<TKey>(TKey id, TEntity newEntity)
         {
             throw new NotImplementedException();
         }

@@ -1,12 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using Microsoft.AspNetCore.Connections.Features;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Spg.SpengerShop.Application.Filter;
+using Spg.SpengerShop.Application.Services.Extended;
 using Spg.SpengerShop.Domain.Dtos;
 using Spg.SpengerShop.Domain.Interfaces;
-using Spg.SpengerShop.Domain.Model;
 
 namespace Spg.SpengerShop.Api.Controllers
 {
@@ -37,7 +34,12 @@ namespace Spg.SpengerShop.Api.Controllers
         {
             try
             {
-                IEnumerable<ProductDto> result = _readOnlyProductService.GetAll();
+                IEnumerable<ProductDto> result = _readOnlyProductService
+                    .Load()
+                    .UseFilterByName("")
+                    .UseFilterByExpiryDate(DateTime.Now, DateTime.Now)
+                    .UseFilterByStock(10)
+                    .GetDataPaged(1, 2);
                 return Ok(result);
             }
             catch (Exception ex)

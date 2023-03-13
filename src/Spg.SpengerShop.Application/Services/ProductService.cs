@@ -1,27 +1,57 @@
-﻿using Spg.SpengerShop.Domain.Dtos;
+﻿using Spg.SpengerShop.Application.Mock;
+using Spg.SpengerShop.Domain.Dtos;
+using Spg.SpengerShop.Domain.Exceptions;
+using Spg.SpengerShop.Domain.Helpers;
 using Spg.SpengerShop.Domain.Interfaces;
 using Spg.SpengerShop.Domain.Model;
-using Spg.SpengerShop.Repository.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Spg.SpengerShop.Application.Services
 {
     public class ProductService : IAddUpdateableProductService, IReadOnlyProductService
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IRepositoryBase<Product> _productRepository;
+        private readonly IReadOnlyRepositoryBase<Product> _readOnlyProductRepository;
+        private readonly IReadOnlyRepositoryBase<Category> _readOnlyCategoryRepository;
+        private readonly IDateTimeService _dateTimeService;
 
-        public ProductService(IProductRepository productRepository)
+        public ProductService(
+            IRepositoryBase<Product> productRepository,
+            IReadOnlyRepositoryBase<Product> readOnlyProductRepository,
+            IReadOnlyRepositoryBase<Category> readOnlyCategoryRepository,
+            IDateTimeService dateTimeService)
         {
             _productRepository = productRepository;
+            _readOnlyProductRepository = readOnlyProductRepository;
+            _readOnlyCategoryRepository = readOnlyCategoryRepository;
+            _dateTimeService = dateTimeService;
+        }
+        public IQueryable<Product> Products { get; set; }
+
+        public IReadOnlyProductService Load()
+        {
+            Products = _readOnlyProductRepository.GetAll().Result;
+            return this;
         }
 
-        public IEnumerable<Product> GetAll()
+        public IEnumerable<ProductDto> GetData()
         {
-            return _productRepository.GetAll();
+            List<ProductDto> data = new List<ProductDto>();
+            foreach (Product product in Products)
+            {
+                data.Add(new ProductDto() 
+                {
+                    Name = product.Name, 
+                    Ean13 = product.Ean13, 
+                    ExpiryDate = product.ExpiryDate, 
+                    DeliveryDate = product.DeliveryDate
+                });
+            }
+            return data;
+        }
+
+        public PagenatedList<ProductDto> GetDataPaged(int pageIndex, int pageSize)
+        {
+            return PagenatedList<ProductDto>.Create(GetData().AsQueryable(), pageIndex, pageSize);
         }
 
         public Product GetByName(string name)
@@ -29,10 +59,24 @@ namespace Spg.SpengerShop.Application.Services
             throw new NotImplementedException();
         }
 
-        public void Create(Product newProduct)
+        public void Create(ProductDto dto)
         {
-            // Die Bedingungen zum Eintragen prüfen
+            // Init
+            Category category = _readOnlyCategoryRepository.GetSingleOrDefaultByGuid<Category>(dto.CategoryId);
+
+            // Validation
+            if (dto.ExpiryDate < _dateTimeService.UtcNow.AddDays(14))
+            {
+                throw new ProductCreateValidationException("Datum muss 2 Wochen in Zukunft liegen!");
+            }
+
+            // Mapping
+            Product newProduct = new Product(dto.Name, 20, dto.Ean13, "M", dto.ExpiryDate, category);
+
+            // Act + Save
             _productRepository.Create(newProduct);
+
+            // [Save]
         }
 
         public bool Update(Product product)
@@ -41,11 +85,6 @@ namespace Spg.SpengerShop.Application.Services
         }
 
         public bool Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerable<ProductDto> IReadOnlyProductService.GetAll()
         {
             throw new NotImplementedException();
         }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Spg.SpengerShop.Api.Services;
 using Spg.SpengerShop.Application.Authentication;
+using Spg.SpengerShop.Application.Mock;
 using Spg.SpengerShop.Application.Services;
 using Spg.SpengerShop.Application.Services.Customers.Queries;
 using Spg.SpengerShop.Application.Validators;
@@ -29,7 +30,10 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 builder.Services.AddTransient<IAddUpdateableProductService, ProductService>();
 builder.Services.AddTransient<IReadOnlyProductService, ProductService>();
-builder.Services.AddTransient<IProductRepository, ProductRepository>();
+builder.Services.AddTransient<IRepositoryBase<Product>, RepositoryBase<Product>>();
+builder.Services.AddTransient<IReadOnlyRepositoryBase<Product>, ReadOnlyRepositoryBase<Product>>();
+builder.Services.AddTransient<IReadOnlyRepositoryBase<Category>, ReadOnlyRepositoryBase<Category>>();
+builder.Services.AddTransient<IDateTimeService, DateTimeService>();
 
 builder.Services.AddTransient<IRequestHandler<GetCustomerByIdQuery, Customer>, GetCustomerByIdQueryHandler>();
 builder.Services.AddTransient<IRequestHandler<GetFilteredCustomerQuery, IQueryable<Customer>>, GetFilteredCustomerHandler>();
