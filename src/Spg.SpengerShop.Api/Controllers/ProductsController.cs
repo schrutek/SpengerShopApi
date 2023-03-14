@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Spg.SpengerShop.Application.Services.Extended;
 using Spg.SpengerShop.Domain.Dtos;
@@ -10,6 +12,7 @@ namespace Spg.SpengerShop.Api.Controllers
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsController : ControllerBase
     {
         private readonly IReadOnlyProductService _readOnlyProductService;
@@ -30,6 +33,7 @@ namespace Spg.SpengerShop.Api.Controllers
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             try
@@ -50,9 +54,10 @@ namespace Spg.SpengerShop.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize()] //Roles = "Teacher"
         public IActionResult GetDetails(int id)
         {
-            return null;
+            return Ok(new List<string>() { "A", "B", "C", "D" });
         }
 
         [HttpPost()]
