@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Spg.SpengerShop.DbExtensions
 {
@@ -75,7 +69,8 @@ namespace Spg.SpengerShop.DbExtensions
                 {
                     OnMessageReceived = ctx =>
                     {
-                        string token = ctx.Request.Query["token"];
+                        string token = string.Empty;
+                        token = ctx.Request.Query["token"]!;
                         if (!string.IsNullOrEmpty(token))
                         {
                             ctx.Token = token;
@@ -85,7 +80,7 @@ namespace Spg.SpengerShop.DbExtensions
                 };
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
+                    ValidateIssuerSigningKey = false,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false

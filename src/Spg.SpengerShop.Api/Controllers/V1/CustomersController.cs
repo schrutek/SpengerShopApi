@@ -13,15 +13,15 @@ using System.Linq.Expressions;
 namespace Spg.SpengerShop.Api.Controllers.V1
 {
     //[Route("api/[controller]")]
-    [Route("api/v{version:apiVersion}/Customer")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0", Deprecated = true)]
-    public class CustomerController : ControllerBase
+    public class CustomersController : ControllerBase
     {
         private readonly IMediator _mediator;
         //private readonly IValidator<NewCustomerDto> _newCustomerValidator;
 
-        public CustomerController(IMediator mediator)
+        public CustomersController(IMediator mediator)
         {
             _mediator = mediator;
             //_newCustomerValidator = newCustomerValidator;
@@ -77,7 +77,7 @@ namespace Spg.SpengerShop.Api.Controllers.V1
             //{
             //    return BadRequest(validationResult.ToDictionary());
             //}
-            //Customer result = await _mediator.Send(new CreateCustomerCommand(new Customer(GenderTypes.MALE, dto.FirstName, dto.LastName, dto.EMail, new Guid(), DateTime.Now)));
+            //Customer result = await _mediator.Send(new CreateCustomerCommand(new Customer(GenderTypes.MALE, dto.FirstName, dto.LastName, dto.EMail, new Id(), DateTime.Now)));
             //return Created("", result);
         }
     }

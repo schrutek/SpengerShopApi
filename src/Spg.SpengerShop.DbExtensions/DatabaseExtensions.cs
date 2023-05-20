@@ -17,13 +17,13 @@ namespace Spg.SpengerShop.DbExtensions
             });
         }
 
-        public static void ConfigureMsSql(this IServiceCollection services, string connectionString)
+        public static void ConfigureMySql(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<SpengerShopContext>(options =>
             {
                 if (!options.IsConfigured)
                 {
-                    options.UseSqlServer(connectionString);
+                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
                 }
             });
         }

@@ -1,0 +1,12 @@
+https://localhost:5001/api/owner/261e1685-cf26-494c-b17c-3546e65f5620?filter=closed
+
+
+
+URL:
+https://localhost:5001
+
+PATH:
+/api/owner/261e1685-cf26-494c-b17c-3546e65f5620
+
+QUERY:
+?filter=closed&...

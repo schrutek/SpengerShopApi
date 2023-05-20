@@ -10,11 +10,11 @@ namespace Spg.SpengerShop.Application.Services.Customers.Queries
 {
     public class GetCustomerByIdQuery : IRequest<Customer>
     {
-        public GetCustomerByIdQuery(Guid guid)
+        public GetCustomerByIdQuery(Guid id)
         {
-            Guid = guid;
+            Id = id;
         }
 
-        public Guid Guid { get; set; }
+        public Guid Id { get; set; }
     }
 }

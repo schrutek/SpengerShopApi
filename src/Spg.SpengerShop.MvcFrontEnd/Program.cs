@@ -1,9 +1,16 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Spg.SpengerShop.Application.Mock;
 using Spg.SpengerShop.Application.Services;
+using Spg.SpengerShop.Application.Services.Customers.Commands;
+using Spg.SpengerShop.Application.Services.Customers.Queries;
 using Spg.SpengerShop.DbExtensions;
 using Spg.SpengerShop.Domain.Interfaces;
+using Spg.SpengerShop.Domain.Model;
 using Spg.SpengerShop.Infrastructure;
+using Spg.SpengerShop.Repository;
 using Spg.SpengerShop.Repository.Repositories;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +18,25 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 // Create services to the container.
 builder.Services.AddControllersWithViews();
+
+// Services
 builder.Services.AddTransient<IAddUpdateableProductService, ProductService>();
 builder.Services.AddTransient<IReadOnlyProductService, ProductService>();
-builder.Services.AddTransient<IProductRepository, ProductRepository>();
+
+// Repositories
+builder.Services.AddTransient<IRepository<Customer>, CustomerRepository>();
+builder.Services.AddTransient<IRepositoryBase<Product>, RepositoryBase<Product>>();
+builder.Services.AddTransient<IReadOnlyRepositoryBase<Product>, ReadOnlyRepositoryBase<Product>>();
+builder.Services.AddTransient<IReadOnlyRepositoryBase<Category>, ReadOnlyRepositoryBase<Category>>();
+builder.Services.AddTransient<IReadOnlyRepositoryBase<Customer>, ReadOnlyRepositoryBase<Customer>>();
+builder.Services.AddTransient<IDateTimeService, DateTimeService>();
+
+// MediatR
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddTransient<IRequestHandler<GetCustomerByIdQuery, Customer>, GetCustomerByIdQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<GetFilteredCustomerQuery, IQueryable<Customer>>, GetFilteredCustomerHandler>();
+builder.Services.AddTransient<IRequestHandler<CreateCustomerCommand, Customer>, CreateCustomerCommandHandler>();
+
 builder.Services.ConfigureSqLite(connectionString);
 
 //IServiceProvider provider = builder.Services.BuildServiceProvider();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Spg.SpengerShop.Domain.Dtos
 {
-    public class ProductDto
+    public class ProductDto : DtoBase
     {
         public string Name { get; set; } = string.Empty;
         public string Ean13 { get; set; } = string.Empty;

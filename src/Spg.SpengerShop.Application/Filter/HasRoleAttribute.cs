@@ -10,10 +10,12 @@ namespace Spg.SpengerShop.Application.Filter
 {
     public class HasRoleAttribute : ActionFilterAttribute, IActionFilter
     {
+        public string Role { get; set; } = string.Empty;
+
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             string role = context.HttpContext.Request.Headers["role"].ToString() ?? string.Empty;
-            if (role != "admin")
+            if (role != Role)
             {
                 context.Result = new UnauthorizedObjectResult("Zutritt verboten!");
             }

@@ -1,0 +1,163 @@
+Liebe Klasse,
+
+nochmal kurz zu HATEOAS: Ich werde das am Dienstag nochmal wiederholen. Natürlich freue ich mich über Umsetzungsideen. Kurz zu einem Beispielergebnis, wie es aussehen könnte:
+
+Einer der Vorteile: Die API sollte dadurch "erforschbar" werden. 
+
+Z.B.:
+GET https://localhost:50001/api
+
+könnte liefern:
+[
+    {
+        "href": "http://localhost:5001/api",
+        "rel": "self",
+        "method": "GET"
+    },
+    {
+        "href": "http://localhost:5001/api/owner",
+        "rel": "owner",
+        "method": "GET"
+    },
+    {
+        "href": "http://localhost:5000/api/owner",
+        "rel": "create_owner",
+        "method": "POST"
+    }
+]
+
+
+nun weiß man also, es gibt Owners. Die nächste URL...
+GET http://localhost:5001/api/owner
+
+liefert also...
+[
+    {
+        "Id": "24fd81f8-d58a-4bcc-9f35-dc6cd5641906",
+        "Name": "John Keen",
+        "DateOfBirth": "1980-12-05T00:00:00",
+        "Address": "61 Wellfield Road",
+        "Links": [
+            {
+                "href": "https://localhost:5001/api/owner/24fd81f8-d58a-4bcc-9f35-dc6cd5641906",
+                "rel": "self",
+                "method": "GET"
+            },
+            {
+                "href": "https://localhost:5001/api/owner/24fd81f8-d58a-4bcc-9f35-dc6cd5641906",
+                "rel": "delete_owner",
+                "method": "DELETE"
+            },
+            {
+                "href": "https://localhost:5001/api/owner/24fd81f8-d58a-4bcc-9f35-dc6cd5641906",
+                "rel": "update_owner",
+                "method": "PUT"
+            }
+        ]
+    },
+    {
+        "Id": "261e1685-cf26-494c-b17c-3546e65f5620",
+        "Name": "Anna Bosh",
+        "DateOfBirth": "1974-11-14T00:00:00",
+        "Address": "27 Colored Row",
+        "Links": [
+            {
+                "href": "https://localhost:5001/api/owner/261e1685-cf26-494c-b17c-3546e65f5620",
+                "rel": "self",
+                "method": "GET"
+            },
+            {
+                "href": "https://localhost:5001/api/owner/261e1685-cf26-494c-b17c-3546e65f5620",
+                "rel": "delete_owner",
+                "method": "DELETE"
+            },
+            {
+                "href": "https://localhost:5001/api/owner/261e1685-cf26-494c-b17c-3546e65f5620",
+                "rel": "update_owner",
+                "method": "PUT"
+            }
+        ]
+    },
+    "..."
+]
+
+
+oder dasselbe Ergebnis in einem Warpper:
+
+GET https://localhost:5001/api/owner
+
+...
+
+{
+    "value": [
+        {
+            "Id": "24fd81f8-d58a-4bcc-9f35-dc6cd5641906",
+            "Name": "John Keen",
+            "DateOfBirth": "1980-12-05T00:00:00",
+            "Address": "61 Wellfield Road",
+            "Links": [
+                {
+                    "href": "https://localhost:5001/api/owner/24fd81f8-d58a-4bcc-9f35-dc6cd5641906",
+                    "rel": "self",
+                    "method": "GET"
+                },
+                {
+                    "href": "https://localhost:5001/api/owner/24fd81f8-d58a-4bcc-9f35-dc6cd5641906",
+                    "rel": "delete_owner",
+                    "method": "DELETE"
+                },
+                {
+                    "href": "https://localhost:5001/api/owner/24fd81f8-d58a-4bcc-9f35-dc6cd5641906",
+                    "rel": "update_owner",
+                    "method": "PUT"
+                }
+            ]
+        },
+        ...
+        ...
+        ...
+    "links": [
+        {
+            "href": "https://localhost:5001/api/owner",
+            "rel": "self",
+            "method": "GET"
+        }
+    ]
+}
+
+usw...
+
+Ich hätte auch gerne unterschieldiche Navigations bei z.B. unterschiedlichen Werten. Ein schönes Beispiel findet sich auf Wikipedia [https://de.wikipedia.org/wiki/HATEOAS#:~:text=Hypermedia%20as%20the%20Engine%20of,Informationen%20dynamisch%20%C3%BCber%20Hypermedien%20bereitstellen.] für ein Konto, das unterschiedliche Funktionen, je nach Kontostand anbietet:
+
+Positiver Kontostand (man kann einzahlen, abheben, transferieren, K. schließen):
+{
+    "account": {
+        "account_number": 12345,
+        "balance": {
+            "currency": "usd",
+            "value": 100.00
+        },
+        "links": {
+            "deposit": "/accounts/12345/deposit",
+            "withdraw": "/accounts/12345/withdraw",
+            "transfer": "/accounts/12345/transfer",
+            "close": "/accounts/12345/close"
+        }
+    }
+}
+
+Negativer Kontostand (nun kann man nur noch einzahlen, sonst bliebe die Bank ja auf ihren Forderungen sitzen):
+{
+    "account": {
+        "account_number": 12345,
+        "balance": {
+            "currency": "usd",
+            "value": -25.00
+        },
+        "links": {
+            "deposit": "/accounts/12345/deposit"
+        }
+    }
+}
+
+usw...

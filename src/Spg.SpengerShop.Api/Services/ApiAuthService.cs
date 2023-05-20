@@ -110,18 +110,19 @@ namespace Spg.SpengerShop.Api.Services
                 // Payload für den JWT.
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                // Benutzername als Typ ClaimTypes.Name.
-                new Claim(ClaimTypes.Name, credentials.UserName),
-                // ...
-                new Claim(ClaimTypes.Surname, authInfos.FirstName),
-                new Claim(ClaimTypes.GivenName, authInfos.LastName),
-                // Rolle des Benutzer als ClaimTypes.DefaultRoleClaimType
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, authInfos.Role),
+                    // Benutzername als Typ ClaimTypes.Name.
+                    new Claim(ClaimTypes.Name, credentials.UserName),
+                    // ...
+                    new Claim(ClaimTypes.Surname, authInfos.FirstName),
+                    new Claim(ClaimTypes.GivenName, authInfos.LastName),
+                    // Rolle des Benutzer als ClaimTypes.DefaultRoleClaimType
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, authInfos.Role),
                 }),
                 Expires = DateTime.UtcNow + lifetime,
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(_secret),
-                    SecurityAlgorithms.HmacSha256Signature)
+                    SecurityAlgorithms.HmacSha256Signature
+                )
             };
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
@@ -146,7 +147,7 @@ namespace Spg.SpengerShop.Api.Services
                 new Claim(ClaimTypes.Name, credentials.UserName),
                 new Claim(ClaimTypes.Surname, authInfos.FirstName),
                 new Claim(ClaimTypes.GivenName, authInfos.LastName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, authInfos.Role),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, authInfos.Role)
             };
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(
                 claims,

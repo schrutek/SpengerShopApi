@@ -5,14 +5,14 @@ using Spg.SpengerShop.Application.Services.Customers.Queries;
 
 namespace Spg.SpengerShop.Api.Controllers.V2
 {
-    [Route("api/v{version:apiVersion}/Customer")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("2.0")]
-    public class CustomerController : ControllerBase
+    public class CustomersController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public CustomerController(IMediator mediator)
+        public CustomersController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -25,7 +25,7 @@ namespace Spg.SpengerShop.Api.Controllers.V2
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetFiltered()
         {
             var result = await _mediator.Send(new GetFilteredCustomerQuery("C"));
             return Ok(result);

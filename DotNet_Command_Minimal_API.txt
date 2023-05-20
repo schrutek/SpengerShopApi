@@ -1,0 +1,1 @@
+dotnet new webapi -o WeatherForecastApi -minimal --framework net6.0
